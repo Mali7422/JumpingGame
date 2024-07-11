@@ -1,108 +1,104 @@
-const areaWidth = document.querySelector('#container').offsetWidth;
-const areaHeight = document.querySelector('#container').offsetHeight;
-const gamearea = document.getElementById('container');
+const areaWidth = document.querySelector('#container').offsetWidth; // Oyun alanının genişliği
+const areaHeight = document.querySelector('#container').offsetHeight; // Oyun alanının yüksekliği
+const gamearea = document.getElementById('container'); // Oyun alanı elementi
 
-const jumpLongHeight = 120;
-const jumpShortHeight = 70;
-const runSpeed = 5;
-const jumpSpeed = 5;
+const jumpLongHeight = 250; // Uzun zıplama yüksekliği
+const jumpShortHeight = 120; // Kısa zıplama yüksekliği
+const runSpeed = 5; // Koşu hızı
+const jumpSpeed = 5; // Zıplama hızı
 
-let obstacle_height;
-let obstacle_width = 50;
+let obstacle_height; // Engelin yüksekliği
+let obstacle_width = 50; // Engelin genişliği
 
-let keydownTime;
+let keydownTime; // Boşluk tuşuna basılma zamanı
 
 let player = {
-    object: document.querySelector('#player'),
+    object: document.querySelector('#player'), // Oyuncu DOM elementi
+    x: 0, // Oyuncunun x pozisyonu
+    y: 0, // Oyuncunun y pozisyonu
 
-    x: 0,
-    y: 0,
+    height: 50, // Oyuncunun boyu
+    width: 50, // Oyuncunun genişliği
 
-    height: 50,
-    width: 50,
+    shortJump: false, // Kısa zıplama durumu
+    longJump: false, // Uzun zıplama durumu
 
-    shortJump: false,
-    longJump: false,
+    score: 0, // Oyuncunun puanı
 
-    score: 0,
-
-    jumpStarted: false,
-    jumpReachedTop: false
+    jumpStarted: false, // Zıplama başladı mı?
+    jumpReachedTop: false // Zıplama zirveye ulaştı mı?
 };
 
-let obstacles = [];
+let obstacles = []; // Engellerin listesi
 
-obstacles.push(newObstacle());
+obstacles.push(newObstacle()); // Başlangıçta bir engel oluştur
 
 var game = setInterval(function () {
     play();
-}, 20);
+}, 20); // Oyun döngüsü, 20ms aralıklarla `play()` fonksiyonunu çağırır
 
 function play() {
-    player.x += runSpeed;
+    player.x += runSpeed; // Oyuncunun x pozisyonunu koşu hızıyla güncelle
 
     if (player.jumpStarted) {
-        if (player.y >= jumpShortHeight && player.shortJump) {
+        // Eğer oyuncu zıplama başladıysa
+        if ((player.y >= jumpShortHeight) && player.shortJump) {
             player.jumpReachedTop = true;
-            player.y -= jumpSpeed;
         }
-        else if (player.y >= jumpLongHeight && player.longJump) {
+        else if ((player.y >= jumpLongHeight) && player.longJump) {
             player.jumpReachedTop = true;
-            player.y -= jumpSpeed;
         }
-        else if (player.jumpReachedTop) {
 
-            player.y -= jumpSpeed;
+        if (player.jumpReachedTop) {
+            // Zıplama zirveye ulaştıysa
+            player.y -= jumpSpeed; // Yukarı doğru zıpla
             if (player.y <= 0) {
-                obstacles.push(newObstacle());
-                player.y = 0;
-                player.jumpStarted = false;
-                player.jumpReachedTop = false;
+                obstacles.push(newObstacle()); // Yeni bir engel ekle
+                player.y = 0; // Oyuncunun y pozisyonunu sıfırla
+                player.jumpStarted = false; // Zıplama durumunu sıfırla
+                player.jumpReachedTop = false; // Zıplama zirveye ulaştı durumunu sıfırla
             }
         }
         else {
-            player.y += jumpSpeed;
+            player.y += jumpSpeed; // Zıplama devam ediyorsa aşağı doğru zıpla
         }
     }
 
-    display();
+    display(); // Ekranı güncelle
 };
-
 
 function display() {
     var playerDisplayLocations = convertToDisplayLocations(player);
-    player.object.style.top = (playerDisplayLocations.y - player.height) + "px";
-    player.object.style.left = playerDisplayLocations.x + "px";
+    player.object.style.top = (playerDisplayLocations.y - player.height) + "px"; // Oyuncunun yüksekliğini ayarla
+    player.object.style.left = playerDisplayLocations.x + "px"; // Oyuncunun x pozisyonunu ayarla
 
-    //obsticle larida goruntule
+    // Engelleri ekrana yerleştir
     for (var i = 0; i < obstacles.length; i++) {
         var oDisplayLocations = convertToDisplayLocations(obstacles[i]);
-        obstacles[i].object.style.top = (oDisplayLocations.y - obstacles[i].height) + "px";
-        obstacles[i].object.style.left = oDisplayLocations.x + "px";
-        obstacles[i].object.style.height = obstacles[i].height + "px";
-        obstacles[i].object.style.width = obstacles[i].width + "px";
+        obstacles[i].object.style.top = (oDisplayLocations.y - obstacles[i].height) + "px"; // Engelin yüksekliğini ayarla
+        obstacles[i].object.style.left = oDisplayLocations.x + "px"; // Engelin x pozisyonunu ayarla
+        obstacles[i].object.style.height = obstacles[i].height + "px"; // Engelin yüksekliğini ayarla
+        obstacles[i].object.style.width = obstacles[i].width + "px"; // Engelin genişliğini ayarla
     }
 }
 
 function convertToDisplayLocations(o) {
-    //sifira sifir noktasinin karsiligi
-    // 50px, areaheight - 50px
+    // Nesnenin oyun alanındaki pozisyonunu görüntüleme pozisyonuna dönüştürür
     var cameraResult = adjustCameraView(o);
 
-    var resultX = 50 + cameraResult.x;
-    var resultY = areaHeight - 50 - cameraResult.y; //cikartiyoruz cunku normal eksende tam ters sekilde
+    var resultX = 50 + cameraResult.x; // X pozisyonu ayarı
+    var resultY = areaHeight - 50 - cameraResult.y; // Y pozisyonu ayarı (eksen tersine)
+
     var result = {
         x: resultX,
         y: resultY
     };
 
-
-
     return result;
 }
 
 function adjustCameraView(o) {
-    // kamera sonra oyuncunun x pozisyonunda sabit kalacak oda yukaridaki noktalar
+    // Kamera ayarı, oyuncunun x pozisyonuna göre sabit kalır, y pozisyonu ayarları
     var result = {
         x: o.x - player.x,
         y: o.y
@@ -110,27 +106,28 @@ function adjustCameraView(o) {
     return result;
 }
 
-
-
 function newObstacle() {
+    // Yeni bir engel oluşturur ve DOM'a ekler
     var o = {
-        x: player.x + areaWidth - 100,
-        y: 0,
-        height: 80,
-        width: 40,
+        x: player.x + areaWidth - 100, // Engelin x pozisyonu
+        y: 0, // Engelin y pozisyonu
+        height: 80, // Engelin yüksekliği
+        width: 40, // Engelin genişliği
         object: null,
     };
-    let baitObject = document.createElement('div');
+
+    let baitObject = document.createElement('div'); // Yeni bir DOM elementi oluştur
+
     baitObject.style.left = "0px";
     baitObject.style.top = "0px";
     baitObject.style.height = "0px";
     baitObject.style.width = "0px";
 
-    baitObject.className = 'obstacle';
+    baitObject.className = 'obstacle'; // CSS sınıfı ekle
 
-    o.object = baitObject; //olusan DOM elementini referans olarak bait nesnesininde icine at sonradan erimde kullanilabilsin
+    o.object = baitObject; // DOM elementini engel nesnesine atar
 
-    gamearea.appendChild(baitObject);
+    gamearea.appendChild(baitObject); // Oyun alanına ekler
 
     return o;
 }
@@ -140,32 +137,39 @@ document.addEventListener('keyup', keyup);
 
 function keydown(e) {
     if (e.key === ' ') {
-        keydownTimeControl();
+        keydownTimeControl(); // Boşluk tuşuna basılma olayını kontrol et
+        
     }
 };
 
 function keyup(e) {
     if (e.key === ' ') {
-        keyupTimeControl();
+        keyupTimeControl(); // Boşluk tuşuna bırakılma olayını kontrol et
     }
 };
 
 function keydownTimeControl() {
-    player.jumpStarted = true;
-    player.shortJump = true;
-    if (!keydownTime) {
-        keydownTime = new Date().getTime();
+    console.log("y :" + player.y);
+    if(!keydownTime) {
+        keydownTime = new Date().getTime(); // Boşluk tuşuna basılma zamanını al
     }
+    player.shortJump = false; // Kısa zıplama modunu kapat
+    player.longJump = true; // Uzun zıplama modunu aç
+    player.jumpStarted = true;
 };
 
 function keyupTimeControl() {
+
     if (keydownTime) {
         const keyupTime = new Date().getTime();
-        const duration = keyupTime - keydownTime;
+        const duration = keyupTime - keydownTime; // Tuş basılı kalma süresini hesapla
 
-        if (duration >= 400) {
-            player.shortJump = false;
-            player.longJump = true;
+        if (duration <= 300) {
+            console.log(duration);
+            player.shortJump = true; // Kısa zıplama modunu kapat
+            player.longJump = false; // Uzun zıplama modunu aç
         }
     }
+
+    keydownTime = null;
 };
