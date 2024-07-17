@@ -6,7 +6,6 @@ const knowledge = document.getElementById('knowledge');
 
 const jumpLongHeight = 150; // Uzun zıplama yüksekliği
 const jumpShortHeight = 120; // Kısa zıplama yüksekliği
-const jumpSpeed = 4; // Zıplama hızı
 const startSpeed = 4;
 const images = [
     'Character/character1.png','Character/character2.png','Character/character3.png','Character/character4.png',
@@ -17,11 +16,14 @@ let health = [];
 
 createHealth();
 
+let knowledgeChilds = [];
+
 
 let currentImageIndex = 0;
 
 let gameOver = false;
 let runSpeed = startSpeed;
+let jumpSpeed = startSpeed;
 let time = 0;
 
 let speedUpdateImage = 10; //resim değiştireceği süre
@@ -157,6 +159,8 @@ function display() {
     
     increaseScore();
 
+    createKnowledgeDiv();
+
 }
 
 function convertToDisplayLocations(o) {
@@ -251,10 +255,6 @@ gamearea.addEventListener('mouseup', keyup);
 gamearea.addEventListener('touchstart', function() {
     touchStarted = true;
     keydown();
-});
-gamearea.addEventListener('touchend', function() {
-    touchEnded = true;
-    keyup();
 });
 
 function keydown(e) {
@@ -367,9 +367,21 @@ function distanceControl() {
     }
 };
 
+// function fire(e) {
+//     if(e.key===c) {
+//         let fireBall = document.createElement('img');
+//         gamearea.appendChild(fireBall);
+//         fireBall.src = 'Props/fire.gif';
+//         fireBall.style.top = 100+'px';
+//         fireBall.style.left = 100+'px';
+//     }
+
+// };
+
 function changeSpeed() {
 
     runSpeed = startSpeed+time*(0.001);
+    // jumpSpeed =  startSpeed+time*(0.001);
 
 };
 
@@ -394,6 +406,27 @@ function increaseScore() {
 
     number.innerText = " " +  player.score;
 
+};
+
+function createKnowledgeDiv() {
+    if(knowledgeChilds.length<10) {
+        var o = {
+            object: document.createElement('div')
+        };
+        o.object.className='knowledge_childs';
+        knowledge.appendChild(o.object);
+        knowledgeChilds.push(o);
+    }
+
+    knowledgeChilds[0].object.textContent = "Player X: " + player.x;
+    knowledgeChilds[1].object.textContent = "Player Left: " + player.object.style.left;
+    
+    for(var i=0; i<obstacles.length; i++) {
+
+        knowledgeChilds[i+2].object.textContent = `Obstacle${[i]} X: ` + obstacles[i].x;
+        knowledgeChilds[i+2].object.textContent = `Obstacle${[i]} X: ` + obstacles[i].x;
+
+    }
 };
 
 function restart() {

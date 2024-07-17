@@ -16,12 +16,26 @@ body {
 
 #container {
     height: 100%;
-    width: 100%;
+    width: 80%;
     margin: auto;
     background-color: rgb(230, 230, 230);
     position: relative;
     padding: 0;
     margin: 0;
+}
+
+#knowledge {
+    box-sizing: border-box;
+    width: 20%;
+    height: 100%;
+    background-color: rgb(230, 230, 230);
+    border: 5px solid rgb(80, 80, 80);
+}
+
+.knowledge_childs {
+    width: 100%;
+    min-height: 40px;
+    border-bottom: 3px solid rgb(80, 80, 80);
 }
 
 #floor {
@@ -68,16 +82,6 @@ body {
     text-align: center;
 }
 
-#knowledge {
-    position: absolute;
-    right: 0;
-    top: 40px;
-    min-width: 240px;
-    height: 50px;
-    background-color: bisque;
-}
-
-
 #character {
     position: absolute;
     left: 50px;
@@ -95,6 +99,8 @@ body {
     /* right: 50px;
     bottom: 50px; */
     background-color: black;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .cloud {
