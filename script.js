@@ -7,12 +7,20 @@ const knowledge = document.getElementById('knowledge');
 const jumpLongHeight = 150; // Uzun zıplama yüksekliği
 const jumpShortHeight = 120; // Kısa zıplama yüksekliği
 const jumpSpeed = 4; // Zıplama hızı
-const characterImgPath = 'Character/character';
 const startSpeed = 4;
+const images = [
+    'Character/character1.png','Character/character2.png','Character/character3.png','Character/character4.png',
+    'Character/character5.png','Character/character6.png','Character/character7.png','Character/character8.png'
+];
+
+let currentImageIndex = 0;
 
 let gameOver = false;
 let runSpeed = startSpeed;
 let time = 0;
+
+let speedUpdateImage = 10;
+let speedUpdatePeriod = 2000;
 
 let keydownTime; // Boşluk tuşuna basılma zamanı
 
@@ -120,6 +128,8 @@ function display() {
     }
 
     changeImage();
+
+    changeSpeed();
     
     increaseScore();
 
@@ -261,12 +271,27 @@ function distanceControl() {
     }
 };
 
+function changeSpeed() {
+
+    runSpeed = startSpeed+time*(0.001);
+
+};
+
 function changeImage() {
 
-    let mod = (time)%64;
-    if(mod%8==0){
-        character.src = characterImgPath+(mod/8+1)+".png";
+    if(time%speedUpdatePeriod==0) {
+        if(speedUpdateImage>2) {
+            speedUpdateImage -= 1;
+        }
     }
+
+    console.log(speedUpdateImage);
+
+    if(time%speedUpdateImage==0) {
+        currentImageIndex = (currentImageIndex + 1)%images.length;
+        player.object.src = images[currentImageIndex];
+    }
+
 };
 
 function increaseScore() {
