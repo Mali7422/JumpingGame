@@ -10,6 +10,8 @@ body {
     justify-content: center;
     align-items: center;
     overflow-x: hidden;
+    font-family: "Pixelify Sans", sans-serif;
+    user-select: none;
 }
 
 #container {
@@ -34,31 +36,52 @@ body {
 
 #score {
     position: absolute;
-    display: flex;
-    justify-content: start;
-    align-items: center;
     top: 0;
     right: 0;
-    width: 100px;
-    height: 40px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 5px;
     background-color: rgb(230, 230, 230);
     border-bottom-left-radius: 5px;
     box-sizing: border-box;
     border-bottom: 2px solid rgb(80, 80, 80);
     border-left: 2px solid rgb(80, 80, 80);
-    padding-left: 5px;
-}
-
-#score p {
-    font-size: 14px;
-    font-weight: bold;
+    display: flex;
+    min-width: 120px;
+    font-size: 18px;
+    font-weight: 500;
     color: rgb(80, 80, 80);
+
 }
 
-#player {
+#text {
+    display: inline-block;
+    height: 25px;
+    width: 50%;
+}
+
+#number {
+    display: inline-block;
+    width: 50%;
+    height: 25px;
+    text-align: center;
+}
+
+#knowledge {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    min-width: 240px;
+    height: 50px;
+    background-color: bisque;
+}
+
+
+#character {
     position: absolute;
     left: 50px;
-    top: 70px;
+    bottom: 70px;
     /*
     width: 50px;
     height: 50px;
@@ -68,8 +91,6 @@ body {
 }
 
 .obstacle {
-    height: 100px;
-    width: 50px;
     position: absolute;
     right: 50px;
     bottom: 50px;
@@ -79,4 +100,23 @@ body {
 #character {
     width: 50px;
     height: 50px;
+}
+
+#tab {
+    position: absolute;
+    top: 40%;
+    left: 35%;
+    min-width: 30%;
+    min-height: 20%;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 5px;
+    background-color: rgb(80, 80, 80);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: bold;
+    color: rgb(230, 230, 230);
+    cursor: default;
 }
