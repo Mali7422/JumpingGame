@@ -13,6 +13,11 @@ const images = [
     'Character/character5.png','Character/character6.png','Character/character7.png','Character/character8.png'
 ];
 
+let health = [];
+
+createHealth();
+
+
 let currentImageIndex = 0;
 
 let gameOver = false;
@@ -305,12 +310,29 @@ function getRandomInterval(min,max) {
 
 
 function obstacle() {
-    console.log("ali")
     obstacles.push(newObstacle());
 };
 
 function cloud() {
     clouds.push(newCloud());
+};
+
+function createHealth() {
+    for(var i=0; i<3; i++) {
+    var o = {
+        object: document.createElement('img'),
+    }
+
+    o.object.src = 'Props/love.png';
+    o.object.className = 'health';
+    gamearea.appendChild(o.object);
+
+    health.push(o);
+    }
+
+    health[0].object.style.left = '20px';
+    health[1].object.style.left = '45px';
+    health[2].object.style.left = '70px';
 };
 
 function distanceControl() {
@@ -322,15 +344,24 @@ function distanceControl() {
         let obstacle_height = obstacles[0].height - 10;
         
         if((player_right>=obstacle_left)&&(player_left<=obstacle_right)&&(player.y>=0)&&(player.y<=obstacle_height)) {
-            clearInterval(game);
-            clearInterval(view);
+           
+                gamearea.removeChild(obstacles[0].object); //ekrandan kaldir
+                obstacles.splice(0,1);
 
-            tab = document.createElement('div');
-            gamearea.appendChild(tab);
-            tab.id = "tab";
-            tab.textContent = "Game Over";
+                gamearea.removeChild(health[0].object);
+                health.splice(0,1);
 
-            gameOver = true;
+            if(health.length==0) {
+                clearInterval(game);
+                clearInterval(view);
+
+                tab = document.createElement('div');
+                gamearea.appendChild(tab);
+                tab.id = "tab";
+                tab.textContent = "Game Over";
+
+                gameOver = true;
+            }
 
         }
     }
