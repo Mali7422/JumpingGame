@@ -24,6 +24,9 @@ let speedUpdatePeriod = 2000;
 
 let keydownTime; // Boşluk tuşuna basılma zamanı
 
+let touchStarted = false;
+let touchEnded = false;
+
 let player = {
     object: document.querySelector('#character'), // Oyuncu DOM elementi
     x: 0, // Oyuncunun x pozisyonu
@@ -193,13 +196,21 @@ document.addEventListener('keydown', keydown);
 document.addEventListener('keyup', keyup);
 gamearea.addEventListener('mousedown', keydown);
 gamearea.addEventListener('mouseup', keyup);
-gamearea.addEventListener('touchstart', keydown);
-gamearea.addEventListener('touchend', keyup);
+gamearea.addEventListener('touchstart', function() {
+    touchStarted = true;
+    keydown();
+});
+gamearea.addEventListener('touchend', function() {
+    touchEnded = true;
+    keyup();
+});
 
 function keydown(e) {
-    if (e.key === ' '||e.button === 0||e.type === 'touch') {
+    if (e.key === ' '||e.button === 0||touchStarted) {
         keydownTimeControl(); // Boşluk tuşuna basılma olayını kontrol et
         start();
+
+        touchStarted = false;
 
         if(gameOver) {
             restart();
@@ -209,9 +220,11 @@ function keydown(e) {
 };
 
 function keyup(e) {
-    if (e.key === ' '||e.button === 0||e.type === 'touch') {
+    if (e.key === ' '||e.button === 0||touchEnded) {
         keyupTimeControl(); // Boşluk tuşuna bırakılma olayını kontrol et
     }
+
+    touchEnded = false;
 };
 
 function keydownTimeControl() {
