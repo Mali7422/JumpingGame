@@ -19,8 +19,8 @@ let gameOver = false;
 let runSpeed = startSpeed;
 let time = 0;
 
-let speedUpdateImage = 10; //resim değiştireceği süre
-let speedUpdatePeriod = 2000; //2000 periyotta bir süreyi azalt
+let speedUpdateImage = 10;
+let speedUpdatePeriod = 2000;
 
 let keydownTime; // Boşluk tuşuna basılma zamanı
 
@@ -45,7 +45,6 @@ let player = {
 };
 
 let obstacles = []; // Engellerin listesi
-let clouds = []; // Sahnedeki bulutlar
 
 let gameStarted = false;
 
@@ -113,13 +112,6 @@ function play() {
         }
     }
 
-    // for (var i = 0; i < clouds.length; i++) {
-    //     if(clouds[i].x<player.x-100){
-    //         gamearea.removeChild(clouds[i].object); //ekrandan kaldir
-    //         clouds.splice(i,1);
-    //         continue;
-    //     }
-    // }
         distanceControl();
       
 };
@@ -136,14 +128,6 @@ function display() {
         obstacles[i].object.style.left = oDisplayLocations.x + "px"; // Engelin x pozisyonunu ayarla
         obstacles[i].object.style.height = obstacles[i].height + "px"; // Engelin yüksekliğini ayarla
         obstacles[i].object.style.width = obstacles[i].width + "px"; // Engelin genişliğini ayarla
-    }
-
-    for (var i = 0; i < clouds.length; i++) {
-        var oDisplayLocations = convertToDisplayLocations(clouds[i]);
-        clouds[i].object.style.top = (oDisplayLocations.y - clouds[i].height) + "px"; // Engelin yüksekliğini ayarla
-        clouds[i].object.style.left = oDisplayLocations.x + "px"; // Engelin x pozisyonunu ayarla
-        clouds[i].object.style.height = clouds[i].height + "px"; // Engelin yüksekliğini ayarla
-        clouds[i].object.style.width = clouds[i].width + "px"; // Engelin genişliğini ayarla
     }
 
     changeImage();
@@ -178,8 +162,7 @@ function adjustCameraView(o) {
     return result;
 };
 
-setTimeout(obstacle, getRandomInterval(700,2000));
-setTimeout(cloud, getRandomInterval(1000,3000));
+setTimeout(obstacle, getRandomInterval(500,3000));
 
 function newObstacle() {
     // Yeni bir engel oluşturur ve DOM'a ekler
@@ -203,41 +186,11 @@ function newObstacle() {
 
     gamearea.appendChild(o.object); // Oyun alanına ekler
     o.object.className = 'obstacle';
-    setTimeout(obstacle, getRandomInterval(700,2000));
+
+    setTimeout(obstacle, getRandomInterval(1000,3000));
 
     return o;
 }
-
-function newCloud() {
-    // Yeni bir engel oluşturur ve DOM'a ekler
-    var o = {
-        x: player.x + areaWidth - 60, // Engelin x pozisyonu
-        y: 470, // Engelin y pozisyonu
-        height: 60, // Engelin yüksekliği
-        width: 60, // Engelin genişliği
-        object: null,
-        cloudSrc: 'Props/cloud',
-        cloudNum: Math.ceil((Math.random()*2))
-    };
-
-    o.object = document.createElement('img'); // Yeni bir DOM elementi oluştur
-    o.object.src = o.cloudSrc + o.cloudNum + '.png';
-    
-    o.object.style.left = "0px";
-    o.object.style.top = "0px";
-    o.object.style.height = "0px";
-    o.object.style.width = "0px";
-    // Ne için olduğunu sor!!!
-
-    o.object.className = 'obstacle';
-
-    gamearea.appendChild(o.object); // Oyun alanına ekler
-    o.object.className = 'cloud';
-
-    setTimeout(cloud, getRandomInterval(1000,3000));
-
-    return o;
-};
 
 document.addEventListener('keydown', keydown);
 document.addEventListener('keyup', keyup);
@@ -305,12 +258,7 @@ function getRandomInterval(min,max) {
 
 
 function obstacle() {
-    console.log("ali")
     obstacles.push(newObstacle());
-};
-
-function cloud() {
-    clouds.push(newCloud());
 };
 
 function distanceControl() {
@@ -349,6 +297,8 @@ function changeImage() {
             speedUpdateImage -= 1;
         }
     }
+
+    console.log(speedUpdateImage);
 
     if(time%speedUpdateImage==0) {
         currentImageIndex = (currentImageIndex + 1)%images.length;
