@@ -197,7 +197,7 @@ gamearea.addEventListener('touchstart', keydown);
 gamearea.addEventListener('touchend', keyup);
 
 function keydown(e) {
-    if (e.key === ' '||e.button === 0||e.type === 'touchstart') {
+    if (e.key === ' '||e.button === 0||e.type === 'touch') {
         keydownTimeControl(); // Boşluk tuşuna basılma olayını kontrol et
         start();
 
@@ -209,7 +209,7 @@ function keydown(e) {
 };
 
 function keyup(e) {
-    if (e.key === ' '||e.button === 0||e.type === 'touchend') {
+    if (e.key === ' '||e.button === 0||e.type === 'touch') {
         keyupTimeControl(); // Boşluk tuşuna bırakılma olayını kontrol et
     }
 };
