@@ -23,7 +23,6 @@ let runSpeed = startSpeed;
 let jumpSpeed = startSpeed;
 let time = 0;
 
-let fireSpeed = 0;
 
 let speedUpdateImage = 10; //resim değiştireceği süre
 let speedUpdatePeriod = 2000; //2000 periyotta bir süreyi azalt
