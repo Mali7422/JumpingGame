@@ -16,26 +16,12 @@ body {
 
 #container {
     height: 100%;
-    width: 80%;
+    width: 100%;
     margin: auto;
     background-color: rgb(230, 230, 230);
     position: relative;
     padding: 0;
     margin: 0;
-}
-
-#knowledge {
-    box-sizing: border-box;
-    width: 20%;
-    height: 100%;
-    background-color: rgb(230, 230, 230);
-    border: 5px solid rgb(80, 80, 80);
-}
-
-.knowledge_childs {
-    width: 100%;
-    min-height: 40px;
-    border-bottom: 3px solid rgb(80, 80, 80);
 }
 
 #floor {

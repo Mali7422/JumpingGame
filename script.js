@@ -2,7 +2,6 @@ const areaWidth = document.querySelector('#container').offsetWidth; // Oyun alan
 const areaHeight = document.querySelector('#container').offsetHeight; // Oyun alanının yüksekliği
 const gamearea = document.getElementById('container'); // Oyun alanı elementi
 const number = document.getElementById('number');
-const knowledge = document.getElementById('knowledge');
 
 const jumpLongHeight = 150; // Uzun zıplama yüksekliği
 const jumpShortHeight = 120; // Kısa zıplama yüksekliği
@@ -16,8 +15,6 @@ let health = [];
 
 createHealth();
 
-let knowledgeChilds = [];
-
 
 let currentImageIndex = 0;
 
@@ -25,6 +22,8 @@ let gameOver = false;
 let runSpeed = startSpeed;
 let jumpSpeed = startSpeed;
 let time = 0;
+
+let fireSpeed = 0;
 
 let speedUpdateImage = 10; //resim değiştireceği süre
 let speedUpdatePeriod = 2000; //2000 periyotta bir süreyi azalt
@@ -120,13 +119,13 @@ function play() {
         }
     }
 
-    // for (var i = 0; i < clouds.length; i++) {
-    //     if(clouds[i].x<player.x-100){
-    //         gamearea.removeChild(clouds[i].object); //ekrandan kaldir
-    //         clouds.splice(i,1);
-    //         continue;
-    //     }
-    // }
+    for (var i = 0; i < clouds.length; i++) {
+        if(clouds[i].x<player.x-100) {
+            gamearea.removeChild(clouds[i].object); //ekrandan kaldir
+            clouds.splice(i,1);
+            continue;
+        }
+    }
         distanceControl();
       
 };
@@ -158,8 +157,6 @@ function display() {
     changeSpeed();
     
     increaseScore();
-
-    createKnowledgeDiv();
 
 }
 
@@ -206,7 +203,6 @@ function newObstacle() {
     o.object.style.top = "0px";
     o.object.style.height = "0px";
     o.object.style.width = "0px";
-    // Ne için olduğunu sor!!!
 
     o.object.className = 'obstacle';
 
@@ -238,8 +234,6 @@ function newCloud() {
     o.object.style.width = "0px";
     // Ne için olduğunu sor!!!
 
-    o.object.className = 'obstacle';
-
     gamearea.appendChild(o.object); // Oyun alanına ekler
     o.object.className = 'cloud';
 
@@ -256,6 +250,11 @@ gamearea.addEventListener('touchstart', function() {
     touchStarted = true;
     keydown();
 });
+gamearea.addEventListener('touchend', function() {
+    touchStarted = true;
+    keyup();
+});
+
 
 function keydown(e) {
     if (e.key === ' '||e.button === 0||touchStarted) {
@@ -367,16 +366,6 @@ function distanceControl() {
     }
 };
 
-// function fire(e) {
-//     if(e.key===c) {
-//         let fireBall = document.createElement('img');
-//         gamearea.appendChild(fireBall);
-//         fireBall.src = 'Props/fire.gif';
-//         fireBall.style.top = 100+'px';
-//         fireBall.style.left = 100+'px';
-//     }
-
-// };
 
 function changeSpeed() {
 
@@ -406,27 +395,6 @@ function increaseScore() {
 
     number.innerText = " " +  player.score;
 
-};
-
-function createKnowledgeDiv() {
-    if(knowledgeChilds.length<10) {
-        var o = {
-            object: document.createElement('div')
-        };
-        o.object.className='knowledge_childs';
-        knowledge.appendChild(o.object);
-        knowledgeChilds.push(o);
-    }
-
-    knowledgeChilds[0].object.textContent = "Player X: " + player.x;
-    knowledgeChilds[1].object.textContent = "Player Left: " + player.object.style.left;
-    
-    for(var i=0; i<obstacles.length; i++) {
-
-        knowledgeChilds[i+2].object.textContent = `Obstacle${[i]} X: ` + obstacles[i].x;
-        knowledgeChilds[i+2].object.textContent = `Obstacle${[i]} X: ` + obstacles[i].x;
-
-    }
 };
 
 function restart() {
