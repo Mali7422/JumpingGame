@@ -216,7 +216,7 @@ function newCloud() {
     // Yeni bir engel oluşturur ve DOM'a ekler
     var o = {
         x: player.x + areaWidth - 60, // Engelin x pozisyonu
-        y: 470, // Engelin y pozisyonu
+        y: areaHeight - 200, // Engelin y pozisyonu
         height: 60, // Engelin yüksekliği
         width: 60, // Engelin genişliği
         object: null,
