@@ -397,12 +397,12 @@ function changeImage() {
         const hidePlayer = setInterval(() => {
             player.object.style.visibility = isVisible ? 'hidden' : 'visible';
             isVisible = !isVisible;
-        }, 200);
+        }, 150);
 
         setTimeout(() => {
             clearInterval(hidePlayer);
             player.object.style.visibility = 'visible';
-        }, 1600);
+        }, 1200);
 
     }
 
