@@ -7,13 +7,15 @@ const jumpLongHeight = 150; // Uzun zıplama yüksekliği
 const jumpShortHeight = 120; // Kısa zıplama yüksekliği
 const startSpeed = 4;
 const images = [
-    'Character/character1.png','Character/character2.png','Character/character3.png','Character/character4.png',
-    'Character/character5.png','Character/character6.png','Character/character7.png','Character/character8.png'
+    'Character/character1.png', 'Character/character2.png', 'Character/character3.png', 'Character/character4.png',
+    'Character/character5.png', 'Character/character6.png', 'Character/character7.png', 'Character/character8.png'
 ];
 
 let health = [];
 
 createHealth();
+
+let crush = false;
 
 
 let currentImageIndex = 0;
@@ -64,14 +66,14 @@ tab.textContent = "Start";
 
 
 function start() {
-    if(gameStarted == false) {
-        
-        setTimeout(function(){tab.remove();}, 40);
+    if (gameStarted == false) {
+
+        setTimeout(function () { tab.remove(); }, 40);
 
         game = setInterval(function () {
             play();
         }, 10); // Oyun döngüsü, 20ms aralıklarla `play()` fonksiyonunu çağırır
-    
+
         view = setInterval(function () {
             display(); // Ekranı güncelle
         }, 10);
@@ -82,8 +84,8 @@ function start() {
 
 function play() {
 
-    time+=1;
-    
+    time += 1;
+
     player.x += runSpeed; // Oyuncunun x pozisyonunu koşu hızıyla güncelle
 
     if (player.jumpStarted) {
@@ -111,22 +113,22 @@ function play() {
 
     //ekrandan cikan obstacle lari kaldir gereksiz yere kalmasin
     for (var i = 0; i < obstacles.length; i++) {
-        if(obstacles[i].x<player.x-100){
+        if (obstacles[i].x < player.x - 100) {
             gamearea.removeChild(obstacles[i].object); //ekrandan kaldir
-            obstacles.splice(i,1);
+            obstacles.splice(i, 1);
             continue;
         }
     }
 
     for (var i = 0; i < clouds.length; i++) {
-        if(clouds[i].x<player.x-100) {
+        if (clouds[i].x < player.x - 100) {
             gamearea.removeChild(clouds[i].object); //ekrandan kaldir
-            clouds.splice(i,1);
+            clouds.splice(i, 1);
             continue;
         }
     }
-        distanceControl();
-      
+    distanceControl();
+
 };
 
 function display() {
@@ -154,7 +156,7 @@ function display() {
     changeImage();
 
     changeSpeed();
-    
+
     increaseScore();
 
 }
@@ -183,21 +185,21 @@ function adjustCameraView(o) {
     return result;
 };
 
-setTimeout(obstacle, getRandomInterval(700,2000));
-setTimeout(cloud, getRandomInterval(1000,3000));
+setTimeout(obstacle, getRandomInterval(700, 2000));
+setTimeout(cloud, getRandomInterval(1000, 3000));
 
 function newObstacle() {
     // Yeni bir engel oluşturur ve DOM'a ekler
     var o = {
         x: player.x + areaWidth - 60, // Engelin x pozisyonu
         y: 0, // Engelin y pozisyonu
-        height: Math.ceil((Math.random()*2))*20+20, // Engelin yüksekliği
+        height: Math.ceil((Math.random() * 2)) * 20 + 20, // Engelin yüksekliği
         width: 40, // Engelin genişliği
         object: null,
     };
 
     o.object = document.createElement('div'); // Yeni bir DOM elementi oluştur
-    
+
     o.object.style.left = "0px";
     o.object.style.top = "0px";
     o.object.style.height = "0px";
@@ -207,7 +209,7 @@ function newObstacle() {
 
     gamearea.appendChild(o.object); // Oyun alanına ekler
     o.object.className = 'obstacle';
-    setTimeout(obstacle, getRandomInterval(700,2000));
+    setTimeout(obstacle, getRandomInterval(700, 2000));
 
     return o;
 }
@@ -221,12 +223,12 @@ function newCloud() {
         width: 60, // Engelin genişliği
         object: null,
         cloudSrc: 'Props/cloud',
-        cloudNum: Math.ceil((Math.random()*2))
+        cloudNum: Math.ceil((Math.random() * 2))
     };
 
     o.object = document.createElement('img'); // Yeni bir DOM elementi oluştur
     o.object.src = o.cloudSrc + o.cloudNum + '.png';
-    
+
     o.object.style.left = "0px";
     o.object.style.top = "0px";
     o.object.style.height = "0px";
@@ -236,7 +238,7 @@ function newCloud() {
     gamearea.appendChild(o.object); // Oyun alanına ekler
     o.object.className = 'cloud';
 
-    setTimeout(cloud, getRandomInterval(1000,3000));
+    setTimeout(cloud, getRandomInterval(1000, 3000));
 
     return o;
 };
@@ -245,24 +247,24 @@ document.addEventListener('keydown', keydown);
 document.addEventListener('keyup', keyup);
 gamearea.addEventListener('mousedown', keydown);
 gamearea.addEventListener('mouseup', keyup);
-gamearea.addEventListener('touchstart', function() {
+gamearea.addEventListener('touchstart', function () {
     touchStarted = true;
     keydown();
 });
-gamearea.addEventListener('touchend', function() {
+gamearea.addEventListener('touchend', function () {
     touchStarted = true;
     keyup();
 });
 
 
 function keydown(e) {
-    if (e.key === ' '||e.button === 0||touchStarted) {
+    if (e.key === ' ' || e.button === 0 || touchStarted) {
         keydownTimeControl(); // Boşluk tuşuna basılma olayını kontrol et
         start();
 
         touchStarted = false;
 
-        if(gameOver) {
+        if (gameOver) {
             restart();
             gameOver = false;
         }
@@ -270,7 +272,7 @@ function keydown(e) {
 };
 
 function keyup(e) {
-    if (e.key === ' '||e.button === 0||touchEnded) {
+    if (e.key === ' ' || e.button === 0 || touchEnded) {
         keyupTimeControl(); // Boşluk tuşuna bırakılma olayını kontrol et
     }
 
@@ -278,7 +280,7 @@ function keyup(e) {
 };
 
 function keydownTimeControl() {
-    if(!keydownTime) {
+    if (!keydownTime) {
         keydownTime = new Date().getTime(); // Boşluk tuşuna basılma zamanını al
     }
     player.shortJump = false; // Kısa zıplama modunu kapat
@@ -301,8 +303,8 @@ function keyupTimeControl() {
     keydownTime = null;
 };
 
-function getRandomInterval(min,max) {
-    return Math.random()*(max-min)+min;
+function getRandomInterval(min, max) {
+    return Math.random() * (max - min) + min;
 };
 
 
@@ -316,16 +318,16 @@ function cloud() {
 };
 
 function createHealth() {
-    for(var i=0; i<3; i++) {
-    var o = {
-        object: document.createElement('img'),
-    }
+    for (var i = 0; i < 3; i++) {
+        var o = {
+            object: document.createElement('img'),
+        }
 
-    o.object.src = 'Props/love.png';
-    o.object.className = 'health';
-    gamearea.appendChild(o.object);
+        o.object.src = 'Props/love.png';
+        o.object.className = 'health';
+        gamearea.appendChild(o.object);
 
-    health.push(o);
+        health.push(o);
     }
 
     health[0].object.style.left = '20px';
@@ -334,22 +336,24 @@ function createHealth() {
 };
 
 function distanceControl() {
-    if(obstacles.length>=1) {
+    if (obstacles.length >= 1) {
         let player_right = player.x + player.width;
         let player_left = player.x;
         let obstacle_right = obstacles[0].x + obstacles[0].width;
         let obstacle_left = obstacles[0].x;
         let obstacle_height = obstacles[0].height - 10;
-        
-        if((player_right>=obstacle_left)&&(player_left<=obstacle_right)&&(player.y>=0)&&(player.y<=obstacle_height)) {
-           
-                gamearea.removeChild(obstacles[0].object); //ekrandan kaldir
-                obstacles.splice(0,1);
 
-                gamearea.removeChild(health[0].object);
-                health.splice(0,1);
+        if ((player_right >= obstacle_left) && (player_left <= obstacle_right) && (player.y >= 0) && (player.y <= obstacle_height)) {
 
-            if(health.length==0) {
+            gamearea.removeChild(obstacles[0].object); //ekrandan kaldir
+            obstacles.splice(0, 1);
+
+            gamearea.removeChild(health[0].object);
+            health.splice(0, 1);
+
+            crush = true;
+
+            if (health.length == 0) {
                 clearInterval(game);
                 clearInterval(view);
 
@@ -368,31 +372,60 @@ function distanceControl() {
 
 function changeSpeed() {
 
-    runSpeed = startSpeed+time*(0.001);
+    runSpeed = startSpeed + time * (0.001);
     // jumpSpeed =  startSpeed+time*(0.001);
 
 };
 
 function changeImage() {
 
-    if(time%speedUpdatePeriod==0) {
-        if(speedUpdateImage>2) {
-            speedUpdateImage -= 1;
+    if (crush) {
+
+        crush = false;
+        if (time % speedUpdatePeriod == 0) {
+            if (speedUpdateImage > 2) {
+                speedUpdateImage -= 1;
+            }
         }
+
+        if (time % speedUpdateImage == 0) {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            player.object.src = images[currentImageIndex];
+        }
+
+        let isVisible = true;
+        const hidePlayer = setInterval(() => {
+            player.object.style.visibility = isVisible ? 'hidden' : 'visible';
+            isVisible = !isVisible;
+        }, 200);
+
+        setTimeout(() => {
+            clearInterval(hidePlayer);
+            player.object.style.visibility = 'visible';
+        }, 1600);
+
     }
 
-    if(time%speedUpdateImage==0) {
-        currentImageIndex = (currentImageIndex + 1)%images.length;
-        player.object.src = images[currentImageIndex];
+    else {
+        if (time % speedUpdatePeriod == 0) {
+            if (speedUpdateImage > 2) {
+                speedUpdateImage -= 1;
+            }
+        }
+
+        if (time % speedUpdateImage == 0) {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            player.object.src = images[currentImageIndex];
+        }
     }
 
 };
 
 function increaseScore() {
 
-    player.score = Math.floor(player.x/100);
+    player.score = Math.floor(player.x / 100);
 
-    number.innerText = " " +  player.score;
+    number.innerText = " " + player.score;
 
 };
 
