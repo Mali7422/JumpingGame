@@ -341,17 +341,12 @@ function distanceControl() {
         let player_left = player.x;
         let obstacle_right = obstacles[0].x + obstacles[0].width;
         let obstacle_left = obstacles[0].x;
-        let obstacle_height = obstacles[0].height - 10;
+        let obstacle_height = obstacles[0].height - 5;
 
         if ((player_right >= obstacle_left) && (player_left <= obstacle_right) && (player.y >= 0) && (player.y <= obstacle_height)) {
 
-            gamearea.removeChild(obstacles[0].object); //ekrandan kaldir
-            obstacles.splice(0, 1);
-
             gamearea.removeChild(health[0].object);
             health.splice(0, 1);
-
-            crush = true;
 
             if (health.length == 0) {
                 clearInterval(game);
@@ -365,6 +360,13 @@ function distanceControl() {
                 gameOver = true;
             }
 
+            if(health.length > 0) {
+                gamearea.removeChild(obstacles[0].object); //ekrandan kaldir
+                obstacles.splice(0, 1);
+            }
+
+
+            crush = true;
         }
     }
 };
